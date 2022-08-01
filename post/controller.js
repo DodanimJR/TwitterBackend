@@ -1,17 +1,18 @@
-const Userservices=require('./service')
-const createUserModel = require('./models');
+const Postservices=require('./service')
+const createPostModel = require('./models');
 const { response } = require('express');
 
 const getAll = async(req,res)=>{
-    Users=await Userservices.getAllUsers();
-    res.json(Users);
+    Posts=await Postservices.getAllPosts();
+    res.json(Posts);
 }
 
 const create = async(req,res)=>{
     try {
-        //const body = await createUserModel.UserModel.validate(req.body);
-        const newUser=await Userservices.createUser(req.body);
-        res.json({"Created User":body}); 
+        
+        console.log(req.body);
+        const newPost=await Postservices.createPost(req.body);
+        res.json({"Created Post":newPost}); 
 
     } catch (err) {
         console.log('=>CREATE=>ERROR',err);
@@ -23,7 +24,7 @@ const update = async(req,res)=>{
     try {
         const {id} = req.params;
         
-        const result = await Userservices.UpdateUser(req.body,id);
+        const result = await Postservices.UpdatePost(req.body,id);
         if(result){
             res.json({"response":result});
         }
@@ -36,7 +37,7 @@ const update = async(req,res)=>{
 const remove = async(req,res)=>{
     try {
         const {id} = req.params;
-        const result = await Userservices.RemoveUser(id);
+        const result = await Postservices.RemovePost(id);
         if(result){
             res.json({"response":result});
     }
@@ -48,7 +49,7 @@ const remove = async(req,res)=>{
 const getbyId =async(req, res)=>{
     try {
         const {id} = req.params;
-        const result = await Userservices.getUserById(id);
+        const result = await Postservices.getPostById(id);
         if(result){
             res.json({"response":result});
     }

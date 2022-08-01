@@ -2,30 +2,31 @@ const { PrismaClient } = require('@prisma/client');
 const _ = require('lodash');
 
 const prisma = new PrismaClient()
-const getAllUsers = async()=>{
-    const Users = await prisma.User.findMany({include:{posts:true}});
-    return Users;
+const getAllPosts = async()=>{
+    const Posts = await prisma.Post.findMany();
+    return Posts;
 }
-const createUser = async(bodys)=>{
+const createPost = async(bodys)=>{
     try {
-        const params=bodys.value;
-        const newUser =await prisma.User.create({
+        const params=bodys;
+        const newPost =await prisma.Post.create({
             data:{
-                "name":params.nombre,
+                "authorId":params.authorId,
+                "text":params.text,
             }
         });
-        return newUser;
+        return newPost;
     } catch (error) {
         throw error
     }
 }
 
-const getUserById = async(id)=>{
+const getPostById = async(id)=>{
     try {
         const finalId= parseInt(id);
-        const User = await prisma.User.findUnique({where:{id:finalId},include:{posts:true}});
-        if(User!=null){
-            return User;
+        const Post = await prisma.Post.findUnique({where:{id:finalId}});
+        if(Post!=null){
+            return Post;
         }else{
             return("NOT FOUND")
         }
@@ -35,18 +36,18 @@ const getUserById = async(id)=>{
     }
 }
 
-const UpdateUser = async(params,id)=>{
+const UpdatePost = async(params,id)=>{
     try {
         const finalId= parseInt(id);
-        const User = await prisma.User.update({
+        const Post = await prisma.Post.update({
             where:{id:finalId},
             data:{
                 "nombre":params.nombre,
                 "facultadId":params.facultadId,
             }
         });
-        if(User!=null){
-            return User;
+        if(Post!=null){
+            return Post;
         }else{
             return("NOT FOUND")
         }
@@ -56,12 +57,12 @@ const UpdateUser = async(params,id)=>{
     }
 }
 
-const RemoveUser = async(id)=>{
+const RemovePost = async(id)=>{
     try {
         const finalId= parseInt(id);
-        const User = await prisma.User.delete({where:{id:finalId}});
-        if(User!=null){
-            return User;
+        const Post = await prisma.Post.delete({where:{id:finalId}});
+        if(Post!=null){
+            return Post;
         }else{
             return("NOT FOUND")
         }
@@ -72,10 +73,10 @@ const RemoveUser = async(id)=>{
 }
 
 module.exports={
-    createUser,
-    getAllUsers,
-    getUserById,
-    UpdateUser,
-    RemoveUser,
-    getUserById
+    createPost,
+    getAllPosts,
+    getPostById,
+    UpdatePost,
+    RemovePost,
+    getPostById
 }

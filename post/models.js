@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const UserModel= Joi.object({
-    nombre: Joi.string().required(), 
+    authorId: Joi.number().integer().required(),
+    Text: Joi.string().required(), 
 })
 
 module.exports={
