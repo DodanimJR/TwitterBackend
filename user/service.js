@@ -3,15 +3,19 @@ const _ = require('lodash');
 
 const prisma = new PrismaClient()
 const getAllUsers = async()=>{
-    const Users = await prisma.User.findMany({include:{posts:true}});
+    const Users = await prisma.User.findMany({include:{posts:true,followedBy:true,following:true}});
     return Users;
 }
 const createUser = async(bodys)=>{
     try {
-        const params=bodys.value;
+        const params=bodys;
+        
         const newUser =await prisma.User.create({
             data:{
-                "name":params.nombre,
+                "username":params.username,
+                "name":params.name,
+                "email":params.email,
+                "password":params.password,      
             }
         });
         return newUser;
@@ -23,7 +27,7 @@ const createUser = async(bodys)=>{
 const getUserById = async(id)=>{
     try {
         const finalId= parseInt(id);
-        const User = await prisma.User.findUnique({where:{id:finalId},include:{posts:true}});
+        const User = await prisma.User.findUnique({where:{id:finalId},include:{posts:true,followedBy:true,following:true}});
         if(User!=null){
             return User;
         }else{
@@ -37,13 +41,11 @@ const getUserById = async(id)=>{
 
 const UpdateUser = async(params,id)=>{
     try {
+        console.log('llegamos al update',params);
         const finalId= parseInt(id);
         const User = await prisma.User.update({
             where:{id:finalId},
-            data:{
-                "nombre":params.nombre,
-                "facultadId":params.facultadId,
-            }
+            data:{params}
         });
         if(User!=null){
             return User;

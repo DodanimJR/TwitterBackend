@@ -12,8 +12,13 @@ datasource db {
 
 model User {
   id    Int    @id @default(autoincrement())
+  username String
   name String 
+  email String 
+  password String
   posts Post[]
+  followedBy Follows[] @relation("following")
+  following  Follows[] @relation("follower")
 }
 
 model Post {
@@ -21,4 +26,14 @@ model Post {
   author   User @relation(fields: [authorId], references: [id])
   authorId Int
   text     String
+  likes   Int @default(0)
+}
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  Int
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  @@id([followerId, followingId])
 }

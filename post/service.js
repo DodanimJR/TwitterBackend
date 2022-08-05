@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 const prisma = new PrismaClient()
 const getAllPosts = async()=>{
-    const Posts = await prisma.Post.findMany();
+    const Posts = await prisma.Post.findMany({include:{author:true}});
     return Posts;
 }
 const createPost = async(bodys)=>{
@@ -24,7 +24,7 @@ const createPost = async(bodys)=>{
 const getPostById = async(id)=>{
     try {
         const finalId= parseInt(id);
-        const Post = await prisma.Post.findUnique({where:{id:finalId}});
+        const Post = await prisma.Post.findUnique({where:{id:finalId},include:{author:true}});
         if(Post!=null){
             return Post;
         }else{
@@ -42,10 +42,9 @@ const UpdatePost = async(params,id)=>{
         const Post = await prisma.Post.update({
             where:{id:finalId},
             data:{
-                "nombre":params.nombre,
-                "facultadId":params.facultadId,
+                likes:{increment:1}
             }
-        });
+        }); 
         if(Post!=null){
             return Post;
         }else{
