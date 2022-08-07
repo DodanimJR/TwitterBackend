@@ -16,7 +16,9 @@ model User {
   name String 
   email String 
   password String
+  avatar String @default("https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg")
   posts Post[]
+  replys Reply[] @relation("author")
   followedBy Follows[] @relation("following")
   following  Follows[] @relation("follower")
 }
@@ -25,6 +27,17 @@ model Post {
   id       Int  @id @default(autoincrement())
   author   User @relation(fields: [authorId], references: [id])
   authorId Int
+  text     String 
+  likes   Int @default(0)
+  replys Reply[]
+}
+
+model Reply{
+  id       Int  @id @default(autoincrement())
+  author   User @relation("author",fields: [authorId], references: [id])
+  authorId Int
+  originalPost Post @relation(fields: [PostId], references: [id])
+  PostId Int
   text     String
   likes   Int @default(0)
 }
