@@ -6,23 +6,6 @@ const getAllUsers = async()=>{
     const Users = await prisma.User.findMany({include:{posts:true,followedBy:true,following:true}});
     return Users;
 }
-const createUser = async(bodys)=>{
-    try {
-        const params=bodys;
-        
-        const newUser =await prisma.User.create({
-            data:{
-                "username":params.username,
-                "name":params.name,
-                "email":params.email,
-                "password":params.password,      
-            }
-        });
-        return newUser;
-    } catch (error) {
-        throw error
-    }
-}
 
 const getUserById = async(id)=>{
     try {
@@ -74,7 +57,6 @@ const RemoveUser = async(id)=>{
 }
 
 module.exports={
-    createUser,
     getAllUsers,
     getUserById,
     UpdateUser,

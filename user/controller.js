@@ -7,18 +7,6 @@ const getAll = async(req,res)=>{
     res.json(Users);
 }
 
-const create = async(req,res)=>{
-    try {
-        //const body = await createUserModel.UserModel.validate(req.body);
-        const newUser=await Userservices.createUser(req.body);
-        res.json({"Created User":newUser}); 
-
-    } catch (err) {
-        console.log('=>CREATE=>ERROR',err);
-        response.json({"error":err});
-    }
-}
-
 const update = async(req,res)=>{
     try {
         const {id} = req.params;
@@ -61,7 +49,7 @@ const getbyId =async(req, res)=>{
 
 module.exports={
     getAll,
-    create,
+    
     update,
     remove,
     getbyId,

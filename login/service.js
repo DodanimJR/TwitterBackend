@@ -1,21 +1,40 @@
 const { PrismaClient } = require('@prisma/client');
-
+var jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
+const secretKey = process.env.TOKEN_SECRET;
 const prisma = new PrismaClient()
+
+function generateAccessToken(username) {
+    return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+  }
 
 const login = async(req,res)=>{
     try {
-        const {email,password} = req.body;
+        const params = req.body;
+        console.log(params);
         const user = await prisma.User.findUnique({
             where:{
-                email:email
+                email:params.email
             }
         });
-        if(user.password==password){
-            res.json({"response":"Login Successful"});
-        }else{
-            res.json({"response":"Login Failed"});
+        if(user){
+            if(user.password==params.password){ 
+                let token = generateAccessToken({username:user.username});
+                res.json({"response":token});
+            }else{
+                res.json({"response":"Incorrect Password"});
+            }
+        }
+        else{
+            res.json({"response":"No user found"});
         }
     } catch (error) {
+        res.json({"response":error});
         throw error
+        
     }
+}
+module.exports = {
+    login
 }
