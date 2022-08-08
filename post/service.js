@@ -28,7 +28,7 @@ const createPost = async(bodys)=>{
 const getPostById = async(id)=>{
     try {
         const finalId= parseInt(id);
-        const Post = await prisma.Post.findUnique({where:{id:finalId},include:{author:true,replys:true}});
+        const Post = await prisma.Post.findUnique({where:{id:finalId},include:{author:true,replys:{orderBy:{id:'desc'},include:{author:true,originalPost:{include:{author:true}}}}}});
         if(Post!=null){
             return Post;
         }else{

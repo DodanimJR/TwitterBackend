@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgres://udcpfzcgdivwyp:7a894c71826cb58e1126322d862cc7094a12913267b0030c01bbba612b01f1fc@ec2-52-207-15-147.compute-1.amazonaws.com:5432/d7f3f141bu5eq0"
 }
 
 model User {
@@ -37,7 +37,7 @@ model Reply{
   id       Int  @id @default(autoincrement())
   author   User @relation(fields: [authorId], references: [id])
   authorId Int
-  RepPost Post @relation(fields: [PostId], references: [id])
+  originalPost Post @relation(fields: [PostId], references: [id])
   PostId Int
   text     String
   likes   Int @default(0)

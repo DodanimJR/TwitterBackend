@@ -13,7 +13,13 @@ const getAllUsers = async()=>{
 const getUserById = async(id)=>{
     try {
         const finalId= parseInt(id);
-        const User = await prisma.User.findUnique({where:{id:finalId},include:{posts:true,followedBy:true,following:true},skip:{password:true}});
+        console.log('consulta por id iniciada a db');
+        const User = await prisma.User.findUnique({where:{id:finalId},include:{
+            posts:{
+                include:
+                {author:true,replys:
+                    {include:{author:true,originalPost:true}}}
+        },followedBy:true,following:true,replys:{orderBy:{id:'desc'},include:{author:true,originalPost:{include:{author:true}}}}}});
         if(User!=null){
             delete User['password']
             return User;

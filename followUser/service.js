@@ -9,12 +9,12 @@ const getAllFollows = async()=>{
 const createFollow = async(bodys)=>{
     try {
         const params=bodys;
+        console.log(bodys);
         
         const newFollow =await prisma.Follows.create({
             data:{
                 "followerId":params.followerId,
                 "followingId":params.followingId,
-                
             }
         });
         return newFollow;

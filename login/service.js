@@ -16,16 +16,28 @@ const login = async(req,res)=>{
         const user = await prisma.User.findUnique({
             where:{
                 email:params.email
+            },
+            include:{
+                posts:true,
+                followedBy:{
+                    select:{
+                        followerId:true
+                    }
+                },
+                following:{
+                    select:{
+                        followingId:true
+                    }
+                }
             }
         });
         if(user){
             if(user.password==params.password){ 
                 let token = generateAccessToken({username:user.username});
-                
+                user.token=token;
+                delete user.password;
                 res.json({"response":{
-                    "token":token,
-                    "userId":user.id,
-                    "userAvatar":user.avatar,
+                    'user':user,
                 }
             });
             }else{
