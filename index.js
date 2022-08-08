@@ -10,5 +10,5 @@ server.use('/',router)
 
 
 server.listen(process.env.PORT || PORT,HOST,()=>{
-    console.log('Server listening at ', HOST, ' ',PORT);
+    //console.log('Server listening at ', HOST, ' ',PORT);
 })
