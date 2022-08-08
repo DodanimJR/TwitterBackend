@@ -7,10 +7,16 @@ const routerReply = require('./reply/router.js');
 const routerLogin = require('./login/router.js');
 const routerSignup = require('./signup/router.js');
 const dotenv = require('dotenv');
+var cors = require('cors')
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 dotenv.config();
 const secretKey = process.env.TOKEN_SECRET;
 const router = express.Router();
-
+router.use(cors(corsOptions))
 router.use(express.json())
 router.use(
     jwt({

@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const _ = require('lodash');
+const { param } = require('./router');
 
 const prisma = new PrismaClient()
 const getAllReplys = async()=>{
@@ -9,10 +10,13 @@ const getAllReplys = async()=>{
 const createReply = async(bodys)=>{
     try {
         const params=bodys;
+        console.log(params);
         const newReply =await prisma.Reply.create({
             data:{
                 "authorId":params.authorId,
-                "text":params.text,
+                "PostId":params.postId,
+                "text":params.text
+                
             }
         });
         return newReply;

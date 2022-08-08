@@ -3,15 +3,19 @@ const _ = require('lodash');
 
 const prisma = new PrismaClient()
 const getAllUsers = async()=>{
-    const Users = await prisma.User.findMany({include:{posts:true,followedBy:true,following:true}});
+    const Users = await prisma.User.findMany({include:{posts:true,replys:true,followedBy:true,following:true}});
+    for (User of Users){
+        delete User['password']
+    }
     return Users;
 }
 
 const getUserById = async(id)=>{
     try {
         const finalId= parseInt(id);
-        const User = await prisma.User.findUnique({where:{id:finalId},include:{posts:true,followedBy:true,following:true}});
+        const User = await prisma.User.findUnique({where:{id:finalId},include:{posts:true,followedBy:true,following:true},skip:{password:true}});
         if(User!=null){
+            delete User['password']
             return User;
         }else{
             return("NOT FOUND")

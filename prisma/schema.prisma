@@ -18,7 +18,7 @@ model User {
   password String
   avatar String @default("https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg")
   posts Post[]
-  replys Reply[] @relation("author")
+  replys Reply[] 
   followedBy Follows[] @relation("following")
   following  Follows[] @relation("follower")
 }
@@ -29,17 +29,19 @@ model Post {
   authorId Int
   text     String 
   likes   Int @default(0)
+  createdAt DateTime @default(now())
   replys Reply[]
 }
 
 model Reply{
   id       Int  @id @default(autoincrement())
-  author   User @relation("author",fields: [authorId], references: [id])
+  author   User @relation(fields: [authorId], references: [id])
   authorId Int
-  originalPost Post @relation(fields: [PostId], references: [id])
+  RepPost Post @relation(fields: [PostId], references: [id])
   PostId Int
   text     String
   likes   Int @default(0)
+  createdAt DateTime @default(now())
 }
 
 model Follows {

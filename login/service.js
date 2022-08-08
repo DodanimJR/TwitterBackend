@@ -12,7 +12,7 @@ function generateAccessToken(username) {
 const login = async(req,res)=>{
     try {
         const params = req.body;
-        console.log(params);
+        
         const user = await prisma.User.findUnique({
             where:{
                 email:params.email
@@ -21,7 +21,13 @@ const login = async(req,res)=>{
         if(user){
             if(user.password==params.password){ 
                 let token = generateAccessToken({username:user.username});
-                res.json({"response":token});
+                
+                res.json({"response":{
+                    "token":token,
+                    "userId":user.id,
+                    "userAvatar":user.avatar,
+                }
+            });
             }else{
                 res.json({"response":"Incorrect Password"});
             }
@@ -30,7 +36,7 @@ const login = async(req,res)=>{
             res.json({"response":"No user found"});
         }
     } catch (error) {
-        res.json({"response":error});
+        res.json({"response":JSON.stringify(error)});
         throw error
         
     }

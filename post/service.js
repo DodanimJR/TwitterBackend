@@ -3,7 +3,11 @@ const _ = require('lodash');
 
 const prisma = new PrismaClient()
 const getAllPosts = async()=>{
-    const Posts = await prisma.Post.findMany({include:{author:true}});
+    const Posts = await prisma.Post.findMany({include:{author:true,replys:{orderBy:{id:'desc'},include:{author:true}}}});
+    Posts.forEach((post)=>{
+        delete post.author.password;
+        
+    });
     return Posts;
 }
 const createPost = async(bodys)=>{
@@ -24,7 +28,7 @@ const createPost = async(bodys)=>{
 const getPostById = async(id)=>{
     try {
         const finalId= parseInt(id);
-        const Post = await prisma.Post.findUnique({where:{id:finalId},include:{author:true}});
+        const Post = await prisma.Post.findUnique({where:{id:finalId},include:{author:true,replys:true}});
         if(Post!=null){
             return Post;
         }else{
